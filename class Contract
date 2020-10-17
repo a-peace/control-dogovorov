@@ -1,0 +1,28 @@
+class Contract(models.Model):
+    # Информация о контрагенте:
+    title = models.CharField('Наименование', max_length=200)
+    legal_address = models.CharField('Юридический адрес', max_length=254)
+    email = models.EmailField('E-mail', blank=True, max_length=200)  # В данный момент не обязательно к заполнению
+
+    # Условия об оплате:
+    price = models.DecimalField('Цена', max_digits=15, decimal_places=2, default=0.0)
+    # portion_of_payments = models('Доли платежа') | Желательно изменить на Количество платежей
+    # В зависимости от доли DateField создается их количество
+
+    # Предмет договора:
+    # Открытие кнопка 'Выбрать' списка работы/услуги
+    name = models.CharField('Наименование', max_length=120)
+    amount = models.PositiveSmallIntegerField('Количество')  # от 0 до 32767
+
+    # Иные условия
+    # Кнопка "Выбрать" список ????
+
+    # Загрузить текст
+    file = models.FileField('Прикрепленный файл', blank=True, upload_to='static/uploads/%Y/%m/%d/')
+
+    number_of_contract = models.CharField('Номер договора', max_length=250)
+    date_of_signing = models.DateField('Дата подписания')
+    period_of_execution = models.DateField('Срок выполнения')
+
+    # Automate
+    date_of_creation = models.DateField('Дата создания', auto_now_add=True)
