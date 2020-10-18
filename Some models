@@ -12,7 +12,6 @@ class Contract(models.Model):
     # Условия Договора
     # Предмет логовора
     terms = models.TextField('Содержание договора', null=True)
-    terms2 = models.TextField('Содержание договора1', null=True)
     # Порядок исполнения
 
     # Предмет договора:
