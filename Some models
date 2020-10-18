@@ -1,0 +1,75 @@
+class Contract(models.Model):
+    type = 'Договор Поставки'
+
+    # Общая информация
+    date_of_signing = models.DateField('Дата подписания')
+    title = models.CharField('Наименование Организации', max_length=200)
+    director = models.CharField('Генеральный директор`1', max_length=100)
+    legal_address = models.CharField('Адрес', max_length=254)
+    email = models.EmailField('E-mail', blank=True, max_length=200)  # В данный момент не обязательно к заполнению
+    number_of_contract = models.CharField('Номер договора', max_length=250)
+
+    # Условия Договора
+    # Предмет логовора
+    terms = models.TextField('Содержание договора', null=True)
+    terms2 = models.TextField('Содержание договора1', null=True)
+    # Порядок исполнения
+
+    # Предмет договора:
+    # Открытие кнопка 'Выбрать' списка работы/услуги
+    name = models.CharField('Наименование', max_length=120)
+    amount = models.PositiveSmallIntegerField('Количество')  # от 0 до 32767
+
+    # Загрузить текст
+    file = models.FileField('Прикрепленный файл', blank=True, upload_to='static/uploads/%Y/%m/%d/')
+
+    period_of_execution = models.DateField('Срок выполнения')
+
+    # Automate
+    date_of_creation = models.DateField('Дата создания', auto_now_add=True)
+
+    PAYMENT = 'На этапе оплаты'
+    SIGNING = 'На этапе подписывания'
+    STATUS_CHOICES = [
+        (PAYMENT, 'На этапе оплаты'),
+        (SIGNING, 'На этапе подписывания')
+    ]
+    status = models.CharField(
+        'Статус',
+        max_length=21,
+        choices=STATUS_CHOICES,
+        default=SIGNING,
+    )
+
+    def __str__(self):
+        return self.title
+
+    class Meta:
+        verbose_name = 'Договор'
+        verbose_name_plural = 'Договоры'
+        
+class Timing(models.Model):
+    DONE = 'Выполнено'
+    NOT_DONE = 'Не выполнено'
+    REACTION_CHOICES = [
+        (DONE, 'Выполнено'),
+        (NOT_DONE, 'Не выполнено')
+    ]
+
+    contract = models.ForeignKey(Contract, null=True, on_delete=models.SET_NULL)
+
+    execution_period = models.DateField('Срок исполнения')
+    subject = models.CharField('Количество товара', max_length=200)
+    payment_period = models.DateField('Срок оплаты')
+    amount = models.DecimalField('Сумма', max_digits=15, decimal_places=2, default=0.0)
+    penalty = models.FloatField('Неустойка')
+    reaction = models.CharField(
+        'Реакция',
+        max_length=12,
+        choices=REACTION_CHOICES,
+        default=NOT_DONE,
+    )
+
+    # claim = ('Претензия')
+
+        
