@@ -28,7 +28,19 @@
                   <td>{{object.amount}}</td>
                   <td>{{object.reaction}}</td>
                   <td>{{object.penalty}}</td>
-                  <td><a class="btn btn-sm btn-outline-secondary" href="">Сформировать</a></td>
+                  {% if object.contract.side == 'Покупатель'%}
+                      {% if object.reaction == 'Не выполнено' and object.today > object.execution_period %}
+                          <td><a class="btn btn-sm btn-success" href="">Сформировать</a></td>
+                      {% else %}
+                          <td><a class="btn btn-sm btn-outline-secondary" href="">Сформировать</a></td>
+                      {% endif %}
+                  {% elif object.contract.side == 'Поставщик'%}
+                      {% if object.reaction == 'Не выполнено' and object.today > object.payment_period %}
+                          <td><a class="btn btn-sm btn-success" href="">Сформировать</a></td>
+                      {% else %}
+                          <td><a class="btn btn-sm btn-outline-secondary" href="">Сформировать</a></td>
+                      {% endif %}
+                  {% endif  %}
                   <td><a class="btn btn-sm btn-info" href="{% url 'update_timing' object.id %}">Изменить</a></td>
                   <td><a class="btn btn-sm btn-danger" href="{% url 'delete_timing' object.id %}">Удалить</a></td>
               </tr>
