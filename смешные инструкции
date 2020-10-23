@@ -1,0 +1,27 @@
+Во views изменить def create_timing на данный код:
+
+def create_timing(request, kek):
+    contract = Contract.objects.get(id=kek)
+    form = TimingForm(initial={'contract': contract})
+    if request.method == 'POST':
+        form = TimingForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+    context = {'form': form}
+    return render(request, 'main/create_timing.html', context)
+  
+В url в Сроках ддобавить к первой /<kek>
+
+# Сроки
+    path('create_timing/<kek>/', views.create_timing, name='create_timing'),
+    path('update_timing/<kek>/', views.update_timing, name='update_timing'),
+    path('delete_timing/<kek>/', views.delete_timing, name='delete_timing'),
+
+В table.html добавить contract.id в ссылку
+
+{% block content %}
+    <div class="card card-body">
+    <h5>Сроки договора</h5> <br>
+        <a class="btn btn-primary  btn-sm btn-block" href="{% url 'create_timing' contract.id %}">Добавить срок</a>
+        <table class="table table-striped">
